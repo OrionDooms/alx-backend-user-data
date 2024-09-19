@@ -56,14 +56,29 @@ class BasicAuth(Auth):
         """user_object_from_credentials check if both the email and password
         are correct, and return the User instance"""
         if type(user_email) == str or type(user_pwd) == str:
-            if User.search({'email': user_email}) is None or len(
+            if not user_email or not user_pwd:
+                return None
+            if not User.search({'email': user_email}) or len(
                     User.search({'email': user_email})) == 0:
                 return None
-            users = User.search({'email': user_email})
-            user = users[0]
-            if not user.is_valid_password(user_pwd):
+            clients = User.search({'email': user_email})
+            client = clients[0]
+            if not client.is_valid_password(user_pwd):
                 return None
-            else:
-                return user
+            return client
         else:
             return None
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """current_user it uses the methods authorization_header,
+        extract_base64_authorization_header, extract_user_credentials,
+        decode_base64_authorization_header, user_object_from_credentials
+        to check the user credentials"""
+        user = self.authorization_header(request)
+        base64_auth = self.extract_base64_authorization_header(user)
+        decoded_auth = self.decode_base64_authorization_header(base64_auth)
+        client = self.extract_user_credentials(decoded_auth)
+        user_email, user_pwd = client
+        if not user or not base64_auth or not decoded_auth or not client:
+            return None
+        return self.user_object_from_credentials(user_email, user_pwd)
