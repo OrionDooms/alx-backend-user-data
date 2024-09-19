@@ -15,17 +15,20 @@ import os
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+
 """check if the Authorization is present in the request."""
 auth_type = getenv("AUTH_TYPE")
+
 """If AUTH_TYPE is 'basic_auth', import and create an instane of BasicAuth"""
 if auth_type == "Basic_auth":
     """If AUTH_TYPE is 'Auth', import and create an instane of auth"""
     if auth_type == "auth":
         auth = Auth()
-elif auth_type == "session_auth":
-    auth = SessionAuth()
 else:
     auth = BasicAuth()
+
+if auth_type == "session_auth":
+    auth = SessionAuth()
 
 
 @app.errorhandler(404)
