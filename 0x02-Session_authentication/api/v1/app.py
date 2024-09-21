@@ -53,11 +53,17 @@ def forbidden(error) -> str:
 @app.before_request
 def before_request():
     """This ensures that any request requiring authentication"""
-    paths = ['/api/v1/status/', '/api/v1/unauthorized/', 'api/v1/forbidden/']
+    paths = [
+            '/api/v1/status/',
+            '/api/v1/unauthorized/',
+            'api/v1/forbidden/',
+            '/api/v1/auth_session/login/']
     if auth is not None:
         if not auth.require_auth(request.path, paths):
             return
         if auth.authorization_header(request) is None:
+            abort(401)
+        if auth.session_cookie(request) is None:
             abort(401)
         client = auth.current_user(request)
         if client is None:
