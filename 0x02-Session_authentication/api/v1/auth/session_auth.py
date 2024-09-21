@@ -29,3 +29,12 @@ class SessionAuth(Auth):
                 return self.user_id_by_session_id.get(session_id)
             return None
         return None
+
+    def current_user(self, request=None):
+        """current_user allows the application to retrieve a User instance
+        on the session ID stored in cookies."""
+        client_id = self.user_id_for_session_id(self.session_cookie(request))
+        if client_id is None:
+            return None
+        client = User.get(user_id)
+        return client
