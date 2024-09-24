@@ -31,8 +31,10 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """This add user method allows you to create s new user in the table"""
+        """ add_user method allows you to create s new user in the table
+        """
+        session = self._session
         client = User(email=email, hashed_password=hashed_password)
-        self._session.add(client)
-        self._session.commit()
+        session.add(client)
+        session.commit()
         return client
