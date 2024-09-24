@@ -45,9 +45,18 @@ class DB:
         """find_user_by it will print the user's ID or it will print an
         error message based on the exception raised."""
         session = self._session
-        user = session.query(User).filter_by(**kwargs).first()
-        if not kwargs:
-            raise InvalidRequestError("Invalid Request")
-        if user is None:
+        try:
+            if not kwargs:
+                raise InvalidRequestError
+
+            user = session.query(User).filter_by(**kwargs).first()
+
+            if user is None:
+                raise NoResultFound
+            return user
+
+        except NoResultFound:
             raise NoResultFound("NO Result Found")
-        return user
+
+        except InvalidRequestError:
+            raise InvalidRequestError("Invalid Request")
