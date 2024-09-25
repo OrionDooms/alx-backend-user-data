@@ -4,9 +4,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.exc import NoResultFound, InvalidRequestError
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session, scoped_session
 from sqlalchemy.orm.session import Session
-from sqlalchemy.orm.exc import NoResultFound
 
 from user import User, Base
 
