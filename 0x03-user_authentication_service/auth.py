@@ -23,8 +23,8 @@ class Auth:
         """register_user If the user already exists, it raises a ValueError,
         otherwise it successfully registers the user."""
         try:
-            if self._db.find_user_by(email=email):
-                raise ValueError("User {} already exists".format(email))
+            self._db.find_user_by(email=email)
+            raise ValueError("User {} already exists".format(email))
         except NoResultFound:
-            pass
-        return self._db.add_user(email, _hash_password(password))
+            client = self._db.add_user(email, _hash_password(password))
+            return client
