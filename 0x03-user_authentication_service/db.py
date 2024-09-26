@@ -35,10 +35,10 @@ class DB:
         """ add_user method allows you to create s new user in the table
         """
         session = self._session
-        client = User(email=email, hashed_password=hashed_password)
-        session.add(client)
+        new_user = User(email=email, hashed_password=hashed_password)
+        session.add(new_user)
         session.commit()
-        return client
+        return new_user
 
     def find_user_by(self, **kwargs) -> User:
         """find_user_by it will print the user's ID or it will print an
