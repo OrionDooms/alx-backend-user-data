@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Basic Flask app"""
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from auth import Auth
 
 AUTH = Auth()
@@ -14,7 +14,7 @@ def home() -> str:
     return jsonify({"message": "bienvenue"})
 
 
-@app.route("/", methods=["GET"])
+@app.route("/users", methods=["POST"])
 def users():
     """This Users  function allows for user registration using form data
     provides clear feedback"""
